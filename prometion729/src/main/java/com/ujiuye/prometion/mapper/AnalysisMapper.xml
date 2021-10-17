@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ujiuye.prometion.mapper.AnalysisMapper">
+
+  <resultMap id="baseResultMap" type="Analysis">
+    <id property="id" column="id"/>
+    <result property="projectname" column="projectname" />
+    <result property="simpledis" column="simpledis" />
+    <result property="detaileddis" column="detaileddis" />
+    <result property="addtime" column="addtime" />
+    <result property="updatetime" column="updatetime" />
+    <result property="remark" column="remark" />
+  </resultMap>
+
+
+  <select id="list" resultMap="baseResultMap">
+        select * from analysis
+    </select>
+
+  <insert id="save" parameterType="Dept">
+    INSERT INTO `analysis` (`id`, `projectname`, `title`, `simpledis`, `detaileddis`, `addtime`, `updatetime`, `remark`)
+    VALUES (#{id},#{projectname},#{title},#{simpledis},#{detaileddis},#{addtime},#{updatetime},#{remark});
+  </insert>
+
+  <update id="update" parameterType="Dept">
+    UPDATE `analysis`
+    SET `projectname` = #{projectname}, `title` = #{title}, `simpledis` = #{simpledis}, `detaileddis` = #{detaileddis}, `addtime` = #{addtime}, `updatetime` = #{updatetime}, `remark` = #{remark}
+    where id=#{id};
+  </update>
+
+  <select id="getById" resultMap="baseResultMap" >
+    select *from analysis
+    where id=#{id};
+  </select>
+
+  <delete id="remove">
+    delete from analysis
+    where id=#{id};
+  </delete>
+
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ujiuye.prometion.mapper.DeptMapper">
+
+    <resultMap id="baseResultMap" type="Dept">
+        <id property="deptno" column="deptno"/>
+        <result property="dname" column="dname" />
+        <result property="local" column="local" />
+    </resultMap>
+    <select id="list" resultMap="baseResultMap">
+        select * from dept
+    </select>
+
+    <insert id="save" parameterType="Dept">
+        INSERT INTO `dept`(`deptno`, `dname`, `local`)
+        VALUES (#{deptno},#{dname},#{local});
+    </insert>
+
+
+    <update id="update" parameterType="Dept">
+        UPDATE `dept`
+        SET `dname` = #{dname}, `local` = #{local}
+        where deptno=#{deptno};
+    </update>
+
+    <select id="getByNo" resultMap="baseResultMap" >
+        select *from dept
+        where deptno=#{deptno};
+    </select>
+
+    <delete id="remove">
+        delete from dept
+        where deptno=#{deptno};
+    </delete>
+
+    <delete id="removeList"  parameterType="java.util.List">
+        delete from dept
+        <foreach collection="nos" separator="," open="where deptno IN(" close=")" item="no">
+            #{no}
+        </foreach>
+
+    </delete>
+</mapper>

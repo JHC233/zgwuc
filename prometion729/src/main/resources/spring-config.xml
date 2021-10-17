@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx.xsd ">
+
+    <context:component-scan base-package="com.ujiuye.prometion.service"/>
+    <!--   加载db.properties-->
+    <context:property-placeholder location="classpath:*.properties"/>
+<!--    数据源-->
+    <bean id="alibabaDatesource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+<!--    配置mybatis相关信息  -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+<!--        数据源-->
+        <property name="dataSource" ref="alibabaDatesource"/>
+<!--        加载mybatis配置文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+<!--        扫描映射文件所在的包-->
+        <property name="basePackage" value="com.ujiuye.prometion.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+<!--    事务-->
+<!--    事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >
+        <property name="dataSource" ref="alibabaDatesource"/>
+    </bean>
+
+<!--    配置事务相关属性-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="update*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="remove*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="*"  read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+<!--    定义切面-->
+    <aop:config>
+        <!--    切点-->
+        <aop:pointcut id="trService" expression="execution(* com.ujiuye.prometion.service.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="trService"/>
+    </aop:config>
+
+</beans>

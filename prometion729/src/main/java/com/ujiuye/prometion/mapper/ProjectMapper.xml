@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ujiuye.prometion.mapper.ProjectMapper">
+
+  <resultMap id="baseResultMap" type="Project">
+    <id property="id" column="id"/>
+    <result property="name" column="name" />
+    <result property="companyname" column="companyname" />
+    <result property="companyperson" column="companyperson" />
+    <result property="customer_fk" column="customer_fk" />
+    <result property="employee_ount" column="employee_ount" />
+    <result property="starttime" column="starttime" />
+    <result property="buildtime" column="buildtime" />
+    <result property="cost" column="cost" />
+    <result property="level" column="level" />
+    <result property="endtime" column="endtime" />
+    <result property="remark" column="remark" />
+    <result property="employee_fk" column="employee_fk" />
+  </resultMap>
+
+
+  <select id="list" resultMap="baseResultMap">
+        select * from project
+    </select>
+
+  <insert id="save" parameterType="Dept">
+    INSERT INTO `project`  (`id`, `name`, `companyname`, `companyperson`, `customer_fk`, `employee_count`, `starttime`, `buildtime`, `cost`, `level`, `endtime`, `remark`, `employee_fk`)
+    VALUES (#{id},#{name},#{companyname},#{companyperson},#{customer_fk},#{employee_count},#{starttime},#{buildtime},#{cost},#{level},#{endtime},#{remark},#{employee_fk});
+  </insert>
+
+  <update id="update" parameterType="Dept">
+    UPDATE `project`
+    SET `name` = #{name}, `companyname` = #{companyname}, `companyperson` = #{companyperson}, `customer_fk` = #{customer_fk}, `employee_count` = #{employee_count}, `starttime` = #{starttime}, `buildtime` = #{buildtime}, `cost` = #{cost}, `level` = #{level}, `endtime` = #{endtime}, `remark` = #{remark}, `employee_fk` = #{employee_fk}
+    where id=#{id};
+  </update>
+
+  <select id="getById" resultMap="baseResultMap" >
+    select *from project
+    where id=#{id};
+  </select>
+
+  <delete id="remove">
+    delete from project
+    where id=#{id};
+  </delete>
+
+</mapper>
